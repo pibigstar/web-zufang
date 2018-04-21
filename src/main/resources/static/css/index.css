@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+.control-panel {
+	position: absolute;
+	top: 30px;
+	right: 20px;
+}
+
+.control-entry {
+	width: 280px;
+	background-color: rgba(119, 136, 153, 0.8);
+	font-family: fantasy, sans-serif;
+	text-align: left;
+	color: white;
+	overflow: auto;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.control-input {
+	margin-left: 120px;
+}
+
+.control-input input[type="text"] {
+	width: 160px;
+}
+
+.control-panel label {
+	float: left;
+	width: 120px;
+}
+
+#transfer-panel {
+	position: absolute;
+	background-color: white;
+	max-height: 80%;
+	overflow-y: auto;
+	top: 30px;
+	left: 20px;
+	width: 250px;
+}

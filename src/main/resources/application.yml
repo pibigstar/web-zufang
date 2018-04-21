@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: Spider
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations:  classpath:/static/
