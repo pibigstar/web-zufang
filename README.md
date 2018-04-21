@@ -7,9 +7,9 @@
 
 ### 使用技术
 
--** 高德地图API的调用**
--** SpringBoot结果MongoDB**
--** Echarts生成图表的使用**
+- ** 高德地图API的调用**
+- ** SpringBoot结果MongoDB**
+- ** Echarts生成图表的使用**
 
 
 ### 参考资料
