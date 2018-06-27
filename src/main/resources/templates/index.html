@@ -76,7 +76,7 @@
         //路径规划
         var amapTransfer;
         
-        var longitude,dimension;//经纬度
+        var longitude=0,dimension=0;//经纬度
         var money = $("input[name='money']").val();//钱权值
         var distance = $("input[name='distance']").val();//距离权值
         
@@ -87,7 +87,7 @@
         		$("input[name='money']").val(0.9);
         		return;
         	}
-        	var temp = 1-money;
+        	var temp = 1 - money;
             $("input[name='distance']").val(temp);
     	});
 
@@ -135,20 +135,16 @@
                 geocoder.getLocation(workAddress, function(status, result) {
                     if (status === 'complete' && result.info === 'OK') {
                         //TODO:获得了有效经纬度，可以做一些展示工作
-                        console.info(result.geocodes[0].location);
                         longitude = result.geocodes[0].location.lng;
                         dimension = result.geocodes[0].location.lat;
                         console.info(longitude+":"+dimension);
-                    	
+                        loadWorkLocation();
+                        loadRentLocationByDB("listRent",longitude,dimension);
                     }else{
                         //获取经纬度失败
                     }
                 }); 	
             })
-            
-            
-            loadWorkLocation();
-            loadRentLocationByDB("listRent");
         }
 
         //添加工作地点标记
@@ -191,7 +187,31 @@
             });
             var icon = 'images/mark_b.png';
             if(index<10){
-            	icon = 'images/mark_g.png';
+            	switch(index){
+            		case 1:
+            			icon = 'images/m1.png';
+            			break;
+            		case 2:
+            			icon = 'images/m2.png';
+            			break;
+            		case 3:
+            			icon = 'images/m3.png';
+            			break;
+            		case 4:
+            			icon = 'images/m4.png';
+            			break;
+            		case 5:
+            			icon = 'images/m5.png';
+            			break;
+            		case 6:
+            			icon = 'images/m6.png';
+            			break;
+            		case 7:
+            			icon = 'images/m7.png';
+            			break;
+            		default:
+            			icon = 'images/1.png';
+            		}
             }
             
             var houseaddress = data.local==null?data.village:data.local
@@ -206,7 +226,7 @@
                     });
                     rentMarkerArray.push(rentMarker);
 
-                    rentMarker.content = "<div><p>房源：<a target='_blank' href='"+data.url+"'>" + data.name + "</a></p><p><span>租金:"+ data.rent+"</span></p><div>"
+                    rentMarker.content = "<div><p>房源：<a target='_blank' href='"+data.url+"'>" + data.name + "</a></p><p><span>租金:"+ data.rent+"</span><span>面积:"+ data.area+"</span></p><div>"
                   
                     //在房源标记被点击时打开
                     rentMarker.on('click', function(e) {
@@ -268,8 +288,9 @@
         }
 
         //加载租房信息根据数据库中的信息
-        function loadRentLocationByDB(dbpath) {
+        function loadRentLocationByDB(dbpath,longitude,dimension) {
             delRentLocation();
+            var distance = $("input[name='distance']").val();//距离权值
             var data = {"longitude":longitude,"dimension":dimension,"money":money,"distance":distance};
             $.get(dbpath,data,function(data) {
                 data = data.data;

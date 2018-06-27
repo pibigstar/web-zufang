@@ -9,8 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pibigstar.domain.RentHouse;
 import com.pibigstar.domain.Variation;
 import com.pibigstar.repository.RentHouseRepository;
-import com.pibigstar.util.JsonResult;
-import com.pibigstar.util.SortResult;
+import com.pibigstar.sort.SortResult;
+import com.pibigstar.sort.SortResult1;
+import com.pibigstar.sort.SortResult2;
+import com.pibigstar.sort.SortResult3;
+import com.pibigstar.sort.SortResult4;
+import com.pibigstar.sort.SortResult5;
+import com.pibigstar.sort.SortResult6;
+import com.pibigstar.sort.SortResult7;
+import com.pibigstar.utils.JsonResult;
 
 @RestController
 public class RentHouseController {
@@ -20,9 +27,10 @@ public class RentHouseController {
 	
 	@RequestMapping("/listRent")
 	public JsonResult getAllRentHouse(Variation variation) {
-		
+		System.out.println("Variation:"+variation);
 		List<RentHouse> rentHouses = repository.findAll();
-		rentHouses = SortResult.sort(rentHouses, variation);
+		//修改此处SortResult5 为SortResult4 则使用排序4算法
+		rentHouses = SortResult4.sort(rentHouses, variation);
 		return JsonResult.success(rentHouses, "OK!");
 	}
 	

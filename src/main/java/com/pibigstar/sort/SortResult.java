@@ -1,4 +1,4 @@
-package com.pibigstar.util;
+package com.pibigstar.sort;
 
 import java.util.Collections;
 import java.util.Comparator;
