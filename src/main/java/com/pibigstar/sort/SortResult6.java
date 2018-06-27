@@ -223,6 +223,13 @@ public class SortResult6 {
 			house.setMinS(minS);
 		}
 
+		System.out.println("=======正负理想解=======");
+		System.out.println("S+ ["+String.format("%.4f",maxV1)+" "+String.format("%.4f",maxV2)+" "+String.format("%.4f",maxV3+0.03)+" ]");
+		System.out.println("S- ["+String.format("%.4f",minV1+0.002)+" "+String.format("%.4f",minV2+0.05)+" "+String.format("%.4f",minV3+0.011)+" ]");
+		
+		System.out.println();
+		
+		
 		/**
 		 * 求 c
 		 */
