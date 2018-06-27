@@ -38,6 +38,9 @@ public class RentHouse implements Comparable<RentHouse>{
 	private double v2;
 	private double v3;
 	
+	private double L1;
+	private double L2;
+	
 	private double maxS;
 	private double minS;
 	
@@ -48,6 +51,18 @@ public class RentHouse implements Comparable<RentHouse>{
 	
 	
 	
+	public double getL1() {
+		return L1;
+	}
+	public void setL1(double l1) {
+		L1 = l1;
+	}
+	public double getL2() {
+		return L2;
+	}
+	public void setL2(double l2) {
+		L2 = l2;
+	}
 	public double getP1() {
 		return p1;
 	}

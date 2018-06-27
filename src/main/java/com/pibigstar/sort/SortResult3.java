@@ -10,7 +10,7 @@ import com.pibigstar.domain.Variation;
 import com.pibigstar.utils.ZuFangUtil;
 
 /**
- * 使用
+ * 排序3 离差求权重+优化
  * @author pibigstar
  *
  */

@@ -30,12 +30,7 @@ public class RentHouseController {
 		System.out.println("Variation:"+variation);
 		List<RentHouse> rentHouses = repository.findAll();
 		//修改此处SortResult5 为SortResult4 则使用排序4算法
-		rentHouses = SortResult4.sort(rentHouses, variation);
+		rentHouses = SortResult6.sort(rentHouses, variation);
 		return JsonResult.success(rentHouses, "OK!");
 	}
-	
-	
-	
-	
-	
 }

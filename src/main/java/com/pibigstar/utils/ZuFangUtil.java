@@ -55,6 +55,34 @@ public class ZuFangUtil {
 			System.out.println();
 		}
 	}
+	/**
+	 * 贴近度排名 L+ L-
+	 * @param subList
+	 */
+	public static void printL(List<RentHouse> subList) {
+		subList = clear(subList);
+		System.out.println("==== 贴近度排名 ====");
+		System.out.println("    L+       L-");
+		for (int i = 0; i < 10; i++) {
+			RentHouse house = subList.get(i);
+			System.out.print("A"+(i+1)+"  "+ format(house.getL1())+"  "+format(house.getL2()));
+			System.out.println();
+		}
+	}
+	/**
+	 * 贴近度排名 d+ d-
+	 * @param subList
+	 */
+	public static void printD(List<RentHouse> subList) {
+		subList = clear(subList);
+		System.out.println("==== 贴近度排名 ====");
+		System.out.println("*********D+**********D-");
+		for (int i = 0; i < 10; i++) {
+			RentHouse house = subList.get(i);
+			System.out.print("A"+(i+1)+"  "+ format(house.getD1())+"  "+format(house.getD2()));
+			System.out.println();
+		}
+	}
 	
 	/**
 	 * 打印C
@@ -64,6 +92,7 @@ public class ZuFangUtil {
 		System.out.println("==== C值 ====");
 		for (int i = 0; i < 10; i++) {
 			RentHouse house = subList.get(i);
+			double s = 0.5;
 			System.out.println(String.format("%.4f",house.getC()));
 		}
 	}
@@ -130,6 +159,15 @@ public class ZuFangUtil {
 			}
 		}
 		return houses;
+	}
+	
+	/**
+	 * 格式化
+	 * @param obj
+	 * @return
+	 */
+	public static String format(double obj) {
+		return String.format("%.4f",obj);
 	}
 	
 	public static double test = 0.03;

@@ -9,6 +9,11 @@ import com.pibigstar.domain.RentHouse;
 import com.pibigstar.domain.Variation;
 import com.pibigstar.utils.ZuFangUtil;
 
+/**
+ * 使用熵值求权法+优化
+ * @author pibigstar
+ *
+ */
 public class SortResult4 {
 	
 	public static List<RentHouse> sort(List<RentHouse>houses,Variation variation){

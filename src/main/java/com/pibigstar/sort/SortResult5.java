@@ -11,6 +11,11 @@ import com.pibigstar.domain.Variation;
 import com.pibigstar.sort.px.GetMatrix;
 import com.pibigstar.utils.ZuFangUtil;
 
+/**
+ * 马氏距离
+ * @author pibigstar
+ *
+ */
 public class SortResult5 {
 
 
@@ -91,11 +96,16 @@ public class SortResult5 {
 			double c = d1/(d1+d2);
 			house.setC(c);
 		}
+		
 		//排序
 		Collections.sort(subList);
 
 		System.out.print("排序后：");
 		System.out.println(df.format(ZuFangUtil.criteria(subList)));
+		
+		
+		ZuFangUtil.printC(subList);
+		
 		
 		System.out.println("     相关系系数矩阵    ");
 		System.out.println("[ "+String.format("%.4f",matrix.a1)+" "+String.format("%.4f",matrix.a2)+" "+String.format("%.4f",matrix.a3)+" ]");		

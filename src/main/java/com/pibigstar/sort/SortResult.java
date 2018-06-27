@@ -7,6 +7,10 @@ import java.util.List;
 import com.pibigstar.domain.RentHouse;
 import com.pibigstar.domain.Variation;
 
+/**
+ * @author pibigstar
+ *
+ */
 public class SortResult {
 	
 	public static List<RentHouse> sort(List<RentHouse>houses,Variation variation){
