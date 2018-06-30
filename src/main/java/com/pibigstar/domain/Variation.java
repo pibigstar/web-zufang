@@ -6,6 +6,16 @@ public class Variation {
 	private double distance;
 	private double longitude;
 	private double dimension;
+	
+	private int choose;
+	
+	
+	public int getChoose() {
+		return choose;
+	}
+	public void setChoose(int choose) {
+		this.choose = choose;
+	}
 	public double getMoney() {
 		return money;
 	}

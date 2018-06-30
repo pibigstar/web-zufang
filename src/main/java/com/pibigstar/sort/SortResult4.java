@@ -17,7 +17,7 @@ import com.pibigstar.utils.ZuFangUtil;
 public class SortResult4 {
 	
 	public static List<RentHouse> sort(List<RentHouse>houses,Variation variation){
-		
+		long startTime = System.currentTimeMillis();
 		List<RentHouse> subList = ZuFangUtil.clear(houses);
 		//List<RentHouse> subList = houses;
 		double minRent = 0 ,minArea = 0,minDistance = 0;
@@ -210,9 +210,9 @@ public class SortResult4 {
 			house.setC(c);
 		}
 		
-		System.out.println("=======正负理想解=======");
-		System.out.println("S+ ["+String.format("%.4f",maxV1)+" "+String.format("%.4f",maxV2)+" "+String.format("%.4f",maxV3+0.03)+" ]");
-		System.out.println("S- ["+String.format("%.4f",minV1+0.002)+" "+String.format("%.4f",minV2+0.05)+" "+String.format("%.4f",minV3+0.011)+" ]");
+		System.out.println("=======最差理想解=======");
+		System.out.println("k+ ["+String.format("%.4f",maxV1)+" "+String.format("%.4f",maxV2)+" "+String.format("%.4f",maxV3+0.03)+" ]");
+		System.out.println("k* ["+String.format("%.4f",minV1+0.002)+" "+String.format("%.4f",minV2+0.05)+" "+String.format("%.4f",minV3+0.011)+" ]");
 		
 		System.out.println();
 		
@@ -221,15 +221,22 @@ public class SortResult4 {
 		System.out.print("排序后：");
 		System.out.println(df.format(ZuFangUtil.criteria(subList)));
 		
-		ZuFangUtil.printY(subList);
-		
 		System.out.println("=====权重======");
 		System.out.println("面积："+String.format("%.4f",w1));
 		System.out.println("租金："+String.format("%.4f",w2));
 		System.out.println("距离："+String.format("%.4f",w3));
 		
+		
+		ZuFangUtil.printY(subList);
+		
 		ZuFangUtil.printC(subList);
 		
+		ZuFangUtil.printDD(subList);
+		
+		
+		long endTime = System.currentTimeMillis();
+		
+		System.out.println("用时："+(endTime-startTime)+"ms");
 		return subList;
 	}
 }

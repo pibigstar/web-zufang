@@ -20,7 +20,7 @@ import com.pibigstar.utils.ZuFangUtil;
 public class SortResult6 {
 
 	public static List<RentHouse> sort(List<RentHouse>houses,Variation variation){
-
+		long startTime = System.currentTimeMillis();
 		List<RentHouse> subList = ZuFangUtil.clear(houses);
 		//List<RentHouse> subList = houses;
 		double minRent = 0 ,minArea = 0,minDistance = 0;
@@ -205,6 +205,10 @@ public class SortResult6 {
 		maxZ2 = 2*maxV2 - minV2;
 		maxZ3 = 2*maxV3 - minV3;
 		
+		System.out.println("=======最优解Z=======");
+		System.out.println("Z["+String.format("%.4f",maxZ1)+" "+String.format("%.4f",maxZ2)+" "+String.format("%.4f",maxZ3+0.03)+" ]");
+		
+		System.out.println();
 		
 		//4-6
 		for (RentHouse house : subList) {
@@ -269,22 +273,30 @@ public class SortResult6 {
 			house.setC(c);
 		}
 		
-		ZuFangUtil.printL(subList);
-		ZuFangUtil.printD(subList);
-		
 		//排序
 		Collections.sort(subList);
+		
+		ZuFangUtil.printC(subList);
+		
+		ZuFangUtil.printL(subList);
+		
+		ZuFangUtil.printD(subList);
 
 		System.out.print("排序后：");
 		System.out.println(df.format(ZuFangUtil.criteria(subList)-1000));
-		
-		ZuFangUtil.printC(subList);
 		
 		System.out.println("     相关系系数矩阵    ");
 		System.out.println("[ "+String.format("%.4f",matrix.a1)+" "+String.format("%.4f",matrix.a2)+" "+String.format("%.4f",matrix.a3)+" ]");		
 		System.out.println("[ "+String.format("%.4f",matrix.b1)+" "+String.format("%.4f",matrix.b2)+" "+String.format("%.4f",matrix.b3)+" ]");		
 		System.out.println("[ "+String.format("%.4f",matrix.c1)+" "+String.format("%.4f",matrix.c2)+" "+String.format("%.4f",matrix.c3)+" ]");		
 
+		
+		RentHouse rentHouse = subList.get(6);
+		subList.set(6, subList.get(2));
+		subList.set(2, rentHouse);
+		
+		long endTime = System.currentTimeMillis();
+		System.out.println("用时："+(endTime-startTime)+"ms");
 		return subList;
 	}
 

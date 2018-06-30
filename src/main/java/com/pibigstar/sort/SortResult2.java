@@ -17,7 +17,7 @@ import com.pibigstar.utils.ZuFangUtil;
 public class SortResult2 {
 	
 	public static List<RentHouse> sort(List<RentHouse>houses,Variation variation){
-		
+		long startTime = System.currentTimeMillis();
 		List<RentHouse> subList = ZuFangUtil.clear(houses);
 		//List<RentHouse> subList = houses;
 		double minRent = 0 ,minArea = 0,minDistance = 0;
@@ -149,6 +149,11 @@ public class SortResult2 {
 		w2 = sumV2 / sumV; // 租金的权值
 		w3 = sumV3 / sumV; // 距离的权值
 		
+		System.out.println("=======离差权值==========");
+		System.out.println("面积："+ZuFangUtil.format(w1));
+		System.out.println("租金："+ZuFangUtil.format(w2));
+		System.out.println("距离："+ZuFangUtil.format(w3));
+		
 		/**
 		 * 计算最优解
 		 */
@@ -205,9 +210,15 @@ public class SortResult2 {
 		
 		Collections.sort(subList);
 		
+		ZuFangUtil.printDD(subList);
 		
 		System.out.print("排序后：");
 		System.out.println(df.format(ZuFangUtil.criteria(subList)));
+		
+		ZuFangUtil.print(subList);
+		
+		long endTime = System.currentTimeMillis();
+		System.out.println("用时："+(endTime-startTime)+"ms");
 		return subList;
 	}
 	

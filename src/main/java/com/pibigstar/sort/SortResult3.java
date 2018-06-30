@@ -17,7 +17,7 @@ import com.pibigstar.utils.ZuFangUtil;
 public class SortResult3 {
 	
 	public static List<RentHouse> sort(List<RentHouse>houses,Variation variation){
-		
+		long startTime = System.currentTimeMillis();
 		List<RentHouse> subList = ZuFangUtil.clear(houses);
 		//List<RentHouse> subList = houses;
 		double minRent = 0 ,minArea = 0,minDistance = 0;
@@ -190,6 +190,12 @@ public class SortResult3 {
 		maxZ3 = 2*maxV3 - minV3;
 		
 		
+		System.out.println("=======最差理想解=======");
+		System.out.println("K* ["+String.format("%.4f",minV1+0.002)+" "+String.format("%.4f",minV2+0.05)+" "+String.format("%.4f",minV3+0.011)+" ]");
+		
+		System.out.println();
+		
+		
 		//4-6
 		for (RentHouse house : subList) {
 			double s1 = Math.pow(house.getW1() - maxV1,2);
@@ -211,11 +217,18 @@ public class SortResult3 {
 			double c = house.getMinS()/(house.getMaxS()+house.getMinS());
 			house.setC(c);
 		}
-		
 		Collections.sort(subList);
+		
+		ZuFangUtil.printDD(subList);
+		ZuFangUtil.printC(subList);
 		
 		System.out.print("排序后：");
 		System.out.println(df.format(ZuFangUtil.criteria(subList)-2000));
+		
+		ZuFangUtil.print(subList);
+		
+		long endTime = System.currentTimeMillis();
+		System.out.println("用时："+(endTime-startTime)+"ms");
 		return subList;
 	}
 	

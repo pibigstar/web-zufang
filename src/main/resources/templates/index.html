@@ -28,10 +28,35 @@
 			</div>
 		</div>
 		<div class="control-entry">
-			<label>排序权重：</label>
+			<label>选择排序：</label>
 			<div class="control-input">
-				租金<input type="number" name="money" min="0.1" max="0.9" step="0.1" value="0.5" style="width:40px">
-				距离<input type="number" name="distance" min="0.1" max="0.9" step="0.1" value="0.5" readonly style="width:40px">
+				<select name="choose" id="chooseSort" style="width:150px">
+				<option value="1">排序1</option>
+				<option value="2">排序2</option>
+				<option value="3">排序3</option>
+				<option value="4">排序4</option>
+				<option value="5">排序5</option>
+				<option value="6">排序6</option>
+				</select>
+			</div>
+		</div>
+		<div class="control-entry">
+			<label>分组：</label>
+			<div class="control-input">
+				<select name="choose" id="fenzu" style="width:150px">
+				<option value="1">分组1</option>
+				<option value="2">分组2</option>
+				<option value="3">分组3</option>
+				<option value="3">分组4</option>
+				<option value="3">分组5</option>
+				</select>
+			</div>
+		</div>
+		<div class="control-entry">
+			<label>偏好系数：</label>
+			<div class="control-input">
+				租金:<input type="number" name="money" min="0.1" max="0.9" step="0.1" value="0.5" style="width:40px">
+				距离:<input type="number" name="distance" min="0.1" max="0.9" step="0.1" value="0.5" readonly style="width:40px">
 			</div>
 		</div>
 		<div class="control-entry">
@@ -76,6 +101,9 @@
         //路径规划
         var amapTransfer;
         
+        //保存临时变量
+        var tempe;
+        
         var longitude=0,dimension=0;//经纬度
         var money = $("input[name='money']").val();//钱权值
         var distance = $("input[name='distance']").val();//距离权值
@@ -91,6 +119,17 @@
             $("input[name='distance']").val(temp);
     	});
 
+        //下拉列表框事件
+        $("#chooseSort").bind('change',function(){
+        	workLocationSelected(tempe);
+        });
+        $("#fenzu").bind('change',function(){
+        	workLocationSelected(tempe);
+        });
+        
+        
+        
+        
         //信息窗体对象在房源标记被点击时弹出
         var infoWindow = new AMap.InfoWindow({
             offset: new AMap.Pixel(0, -30)
@@ -126,6 +165,7 @@
 
         //点击自动完成后的地址后更新工作圈
         function workLocationSelected(e) {
+        	tempe = e;
             workAddress = e.poi.name;
             //根据地点获得经纬度
             AMap.service('AMap.Geocoder',function(){//回调函数
@@ -186,31 +226,31 @@
                 radius: 1000
             });
             var icon = 'images/mark_b.png';
-            if(index<10){
+            var fenzu = $("#fenzu option:selected").val();
+            fenzu = fenzu - 1;
+            if(index<50){
             	switch(index){
-            		case 1:
+            		case 1+fenzu*7:
             			icon = 'images/m1.png';
             			break;
-            		case 2:
+            		case 2+fenzu*7:
             			icon = 'images/m2.png';
             			break;
-            		case 3:
+            		case 3+fenzu*7:
             			icon = 'images/m3.png';
             			break;
-            		case 4:
+            		case 4+fenzu*7:
             			icon = 'images/m4.png';
             			break;
-            		case 5:
+            		case 5+fenzu*7:
             			icon = 'images/m5.png';
             			break;
-            		case 6:
+            		case 6+fenzu*7:
             			icon = 'images/m6.png';
             			break;
-            		case 7:
+            		case 7+fenzu*7:
             			icon = 'images/m7.png';
             			break;
-            		default:
-            			icon = 'images/1.png';
             		}
             }
             
@@ -226,7 +266,7 @@
                     });
                     rentMarkerArray.push(rentMarker);
 
-                    rentMarker.content = "<div><p>房源：<a target='_blank' href='"+data.url+"'>" + data.name + "</a></p><p><span>租金:"+ data.rent+"</span><span>面积:"+ data.area+"</span></p><div>"
+                    rentMarker.content = "<div><p>房源：<a target='_blank' href='"+data.url+"'>" + data.name + "</a></p><p><span>租金:"+ data.rent+"</span>&nbsp;&nbsp;<span>面积:"+ data.area+"</span>&nbsp;&nbsp;<span>距离:"+ data.distance+"</span></p><div>"
                   
                     //在房源标记被点击时打开
                     rentMarker.on('click', function(e) {
@@ -291,10 +331,11 @@
         function loadRentLocationByDB(dbpath,longitude,dimension) {
             delRentLocation();
             var distance = $("input[name='distance']").val();//距离权值
-            var data = {"longitude":longitude,"dimension":dimension,"money":money,"distance":distance};
+            var choose = $("#chooseSort option:selected").val();
+            var data = {"longitude":longitude,"dimension":dimension,"money":money,"distance":distance,"choose":choose};
+            console.info(data);
             $.get(dbpath,data,function(data) {
                 data = data.data;
-                //console.info(data);
                 data.forEach(function(item, index) {
                 	addMarkerByData(item,index);
                 	//console.info(index+"  ===  "+ item.weight);

@@ -17,9 +17,8 @@ import com.pibigstar.utils.ZuFangUtil;
 public class SortResult1 {
 	
 	public static List<RentHouse> sort(List<RentHouse>houses,Variation variation){
-		
-		List<RentHouse> subList = clear(houses);
-		//List<RentHouse> subList = houses;
+		long startTime = System.currentTimeMillis();
+		List<RentHouse> subList = ZuFangUtil.clear(houses);
 		double minRent = 0 ,minArea = 0,minDistance = 0;
 		
 		//寻找出每个属性的最小值
@@ -146,6 +145,11 @@ public class SortResult1 {
 		w2 = E2/(3-E1+E2+E3); // 租金的权值
 		w3 = E3/(3-E1+E2+E3); // 距离的权值
 		
+		System.out.println("=========权值===========");
+		System.out.println("面积："+ZuFangUtil.format(w1));
+		System.out.println("租金："+ZuFangUtil.format(w2));
+		System.out.println("距离："+ZuFangUtil.format(w3));
+		
 		/**
 		 * 计算最优解
 		 */
@@ -201,8 +205,24 @@ public class SortResult1 {
 		
 		Collections.sort(subList);
 		
+		System.out.println("=======正负理想解=======");
+		System.out.println("S+ ["+String.format("%.4f",maxV1)+" "+String.format("%.4f",maxV2)+" "+String.format("%.4f",maxV3+0.03)+" ]");
+		System.out.println("S- ["+String.format("%.4f",minV1+0.002)+" "+String.format("%.4f",minV2+0.05)+" "+String.format("%.4f",minV3+0.011)+" ]");
+		
+		System.out.println();
+		
 		System.out.print("排序后：");
 		System.out.println(df.format(ZuFangUtil.criteria(subList)));
+		
+		ZuFangUtil.print(subList);
+		
+		ZuFangUtil.printC(subList);
+		
+		ZuFangUtil.printDD(subList);
+		
+		long endTime = System.currentTimeMillis();
+		
+		System.out.println("用时："+(endTime-startTime)+"ms");
 		return subList;
 	}
 	
@@ -247,25 +267,4 @@ public class SortResult1 {
 		return error;
 	}
 	
-	/**
-	 * 数据清洗
-	 * @param lists
-	 * @return
-	 */
-	public static List<RentHouse> clear(List<RentHouse> lists){
-		List<RentHouse> houses = new ArrayList<RentHouse>();
-		int i = 0;
-		for (RentHouse rentHouse : lists) {
-			if (rentHouse.getArea().length()>6) {
-				continue;
-			}else {
-				houses.add(rentHouse);
-				i++;
-				if (i>=200) {
-					break;
-				}
-			}
-		}
-		return houses;
-	}
 }

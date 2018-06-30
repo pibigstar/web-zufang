@@ -29,8 +29,29 @@ public class RentHouseController {
 	public JsonResult getAllRentHouse(Variation variation) {
 		System.out.println("Variation:"+variation);
 		List<RentHouse> rentHouses = repository.findAll();
-		//修改此处SortResult5 为SortResult4 则使用排序4算法
-		rentHouses = SortResult6.sort(rentHouses, variation);
+		switch (variation.getChoose()) {
+		case 1:
+			rentHouses = SortResult1.sort(rentHouses, variation);
+			break;
+		case 2:
+			rentHouses = SortResult2.sort(rentHouses, variation);
+			break;
+		case 3:
+			rentHouses = SortResult3.sort(rentHouses, variation);
+			break;
+		case 4:
+			rentHouses = SortResult4.sort(rentHouses, variation);
+			break;
+		case 5:
+			rentHouses = SortResult5.sort(rentHouses, variation);
+			break;
+		case 6:
+			rentHouses = SortResult6.sort(rentHouses, variation);
+			break;
+		default:
+			rentHouses = SortResult6.sort(rentHouses, variation);
+		}
+
 		return JsonResult.success(rentHouses, "OK!");
 	}
 }

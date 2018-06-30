@@ -44,7 +44,7 @@ public class ZuFangUtil {
 	public static void printW(List<RentHouse> subList) {
 		subList = clear(subList);
 		System.out.println("==== 乘以熵之后 ====");
-		System.out.println("面积            租金             距离");
+		System.out.println("面积                租金             距离");
 		for (int i = 0; i < 10; i++) {
 			RentHouse house = subList.get(i);
 			
@@ -80,6 +80,20 @@ public class ZuFangUtil {
 		for (int i = 0; i < 10; i++) {
 			RentHouse house = subList.get(i);
 			System.out.print("A"+(i+1)+"  "+ format(house.getD1())+"  "+format(house.getD2()));
+			System.out.println();
+		}
+	}
+	/**
+	 * 到正负理想解的距离 S+ S-
+	 * @param subList
+	 */
+	public static void printDD(List<RentHouse> subList) {
+		subList = clear(subList);
+		System.out.println("==== 到正负理想解的距离 ====");
+		System.out.println("********S+**********S-");
+		for (int i = 0; i < 10; i++) {
+			RentHouse house = subList.get(i);
+			System.out.print("A"+(i+1)+"  "+ format(house.getMaxS())+"  "+format(house.getMinS()));
 			System.out.println();
 		}
 	}
