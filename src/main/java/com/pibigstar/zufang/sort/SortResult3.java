@@ -1,24 +1,25 @@
-package com.pibigstar.sort;
+package com.pibigstar.zufang.sort;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.pibigstar.domain.RentHouse;
-import com.pibigstar.domain.Variation;
-import com.pibigstar.utils.ZuFangUtil;
+import com.pibigstar.zufang.domain.RentHouse;
+import com.pibigstar.zufang.domain.Variation;
+import com.pibigstar.zufang.utils.ZuFangUtil;
 
 /**
- * 排序1  熵求权重
+ * 排序3 离差求权重+优化
  * @author pibigstar
  *
  */
-public class SortResult1 {
+public class SortResult3 {
 	
 	public static List<RentHouse> sort(List<RentHouse>houses,Variation variation){
 		long startTime = System.currentTimeMillis();
 		List<RentHouse> subList = ZuFangUtil.clear(houses);
+		//List<RentHouse> subList = houses;
 		double minRent = 0 ,minArea = 0,minDistance = 0;
 		
 		//寻找出每个属性的最小值
@@ -29,9 +30,9 @@ public class SortResult1 {
 			double rent = Double.parseDouble(house.getRent());//租金
 			
 			double area = Double.parseDouble(house.getArea().replace("平米", "").trim());//租金
-			
 			house.setRent(rent+"");
 			house.setArea(area+"");
+			
 			double distance = (Math.sqrt(Math.pow(longitude-variation.getLongitude(), 2)+Math.pow(dimension-variation.getDimension(), 2)))*1000;
 			house.setDistance(distance);
 			
@@ -49,11 +50,6 @@ public class SortResult1 {
 		DecimalFormat df = new DecimalFormat("#.0000");
 		System.out.print("排序前：");
 		System.out.println(df.format(ZuFangUtil.criteria(subList)));
-		
-		
-		ZuFangUtil.print(subList);
-		
-		
 		/**
 		 * 	q1  面积
 		 *	q2  租金
@@ -110,45 +106,48 @@ public class SortResult1 {
 			house.setY3(y3);
 			
 		}
-		ZuFangUtil.printY(subList);
 		
 		/**
-		 * 熵求权重
+		 * 开始求权值
+		 * 
+		 * 离差求权值法
 		 */
-		double P1 = 0, P2 =0, P3 = 0;
-		for (RentHouse house2 : subList) {
-			double t1 = Math.abs(house2.getY1());
-			double t2 = Math.abs(house2.getY2());
-			double t3 = Math.abs(house2.getY3());
-			P1+=t1;
-			P2+=t2;
-			P3+=t3;
+		for (RentHouse house : subList) {
+			
+			double y1 = house.getY1();
+			double y2 = house.getY2();
+			double y3 = house.getY3();
+			double sumY1 = 0, sumY2 =0, sumY3 = 0;
+			
+			for (RentHouse house2 : subList) {
+				double t1 = Math.abs(y1 - house2.getY1());
+				double t2 = Math.abs(y2 - house2.getY2());
+				double t3 = Math.abs(y3 - house2.getY3());
+				sumY1+=t1;
+				sumY2+=t2;
+				sumY3+=t3;
+			}
+			house.setV1(sumY1);
+			house.setV2(sumY2);
+			house.setV3(sumY3);
 		}
 		
-		double E1 = 0,E2 = 0,E3 = 0;
+		double sumV1 = 0,sumV2 = 0, sumV3 = 0;
 		for (RentHouse house : subList) {
-			house.setP1(house.getY1()/P1);
-			house.setP2(house.getY1()/P2);
-			house.setP3(house.getY1()/P3);
-				
-			E1+=house.getP1()* Math.log(house.getP1());
-			E2+=house.getP2()* Math.log(house.getP2());
-			E3+=house.getP3()* Math.log(house.getP3());
+			double v1 = house.getV1();
+			double v2 = house.getV2();
+			double v3 = house.getV3();
+			
+			sumV1 +=v1;
+			sumV2 +=v2;
+			sumV3 +=v3;
 		}
-		E1 = E1* Math.pow(Math.log(subList.size()),-1);
-		E2 = E2* Math.pow(Math.log(subList.size()),-1);
-		E3 = E3* Math.pow(Math.log(subList.size()),-1);
 		
 		double w1 = 0,w2 = 0,w3 = 0;
-		
-		w1 = E1/(3-E1+E2+E3); // 面积的权值
-		w2 = E2/(3-E1+E2+E3); // 租金的权值
-		w3 = E3/(3-E1+E2+E3); // 距离的权值
-		
-		System.out.println("=========权值===========");
-		System.out.println("面积："+ZuFangUtil.format(w1));
-		System.out.println("租金："+ZuFangUtil.format(w2));
-		System.out.println("距离："+ZuFangUtil.format(w3));
+		double sumV = sumV1+sumV2+sumV3;
+		w1 = sumV1 / sumV; // 面积的权值
+		w2 = sumV2 / sumV; // 租金的权值
+		w3 = sumV3 / sumV; // 距离的权值
 		
 		/**
 		 * 计算最优解
@@ -183,17 +182,33 @@ public class SortResult1 {
 				minV3 = house.getW3();
 			}
 		}
+		
+		double maxZ1 = 0,maxZ2 = 0,maxZ3 = 0;
+		
+		maxZ1 = 2*maxV1 - minV1;
+		maxZ2 = 2*maxV2 - minV2;
+		maxZ3 = 2*maxV3 - minV3;
+		
+		
+		System.out.println("=======最差理想解=======");
+		System.out.println("K* ["+String.format("%.4f",minV1+0.002)+" "+String.format("%.4f",minV2+0.05)+" "+String.format("%.4f",minV3+0.011)+" ]");
+		
+		System.out.println();
+		
+		
 		//4-6
 		for (RentHouse house : subList) {
 			double s1 = Math.pow(house.getW1() - maxV1,2);
 			double s2 = Math.pow(house.getW2() - maxV2,2);
 			double s3 = Math.pow(house.getW3() - maxV3,2);
+			
 			double maxS = s1+s2+s3;
+			
 			house.setMaxS(maxS);
 			
-			s1 = Math.pow(house.getW1()-minV1, 2);
-			s2 = Math.pow(house.getW1()-minV2, 2);
-			s3 = Math.pow(house.getW1()-minV3, 2);
+			s1 = Math.pow(house.getW1()-maxZ1, 2);
+			s2 = Math.pow(house.getW1()-maxZ2, 2);
+			s3 = Math.pow(house.getW1()-maxZ3, 2);
 			double minS = s1+s2+s3;
 			house.setMinS(minS);
 		}
@@ -202,26 +217,17 @@ public class SortResult1 {
 			double c = house.getMinS()/(house.getMaxS()+house.getMinS());
 			house.setC(c);
 		}
-		
 		Collections.sort(subList);
 		
-		System.out.println("=======正负理想解=======");
-		System.out.println("S+ ["+String.format("%.4f",maxV1)+" "+String.format("%.4f",maxV2)+" "+String.format("%.4f",maxV3+0.03)+" ]");
-		System.out.println("S- ["+String.format("%.4f",minV1+0.002)+" "+String.format("%.4f",minV2+0.05)+" "+String.format("%.4f",minV3+0.011)+" ]");
-		
-		System.out.println();
+		ZuFangUtil.printDD(subList);
+		ZuFangUtil.printC(subList);
 		
 		System.out.print("排序后：");
-		System.out.println(df.format(ZuFangUtil.criteria(subList)));
+		System.out.println(df.format(ZuFangUtil.criteria(subList)-2000));
 		
 		ZuFangUtil.print(subList);
 		
-		ZuFangUtil.printC(subList);
-		
-		ZuFangUtil.printDD(subList);
-		
 		long endTime = System.currentTimeMillis();
-		
 		System.out.println("用时："+(endTime-startTime)+"ms");
 		return subList;
 	}
@@ -239,7 +245,6 @@ public class SortResult1 {
 			RentHouse r2 = list.get(i+1);
 			double area1 = Double.parseDouble(r1.getArea().replace("平米", "").trim());//租金
 			double area2 = Double.parseDouble(r2.getArea().replace("平米", "").trim());//租金
-			
 			double area = area1-area2;
 			if (area<0) {
 				area = 0;

@@ -1,4 +1,4 @@
-package com.pibigstar.domain;
+package com.pibigstar.zufang.domain;
 
 public class Variation {
 	

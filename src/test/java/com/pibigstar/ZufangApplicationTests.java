@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.pibigstar.domain.RentHouse;
-import com.pibigstar.repository.RentHouseRepository;
+import com.pibigstar.zufang.domain.RentHouse;
+import com.pibigstar.zufang.repository.RentHouseRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest

@@ -1,4 +1,4 @@
-package com.pibigstar.utils;
+package com.pibigstar.zufang.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import com.pibigstar.domain.Variation;
+import com.pibigstar.zufang.domain.Variation;
 
 public class GetPositionByName {
 	

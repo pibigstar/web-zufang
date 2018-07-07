@@ -1,4 +1,4 @@
-package com.pibigstar.utils;
+package com.pibigstar.zufang.utils;
 
 public class JsonResult {
 	

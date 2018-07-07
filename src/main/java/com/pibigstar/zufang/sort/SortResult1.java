@@ -1,47 +1,40 @@
-package com.pibigstar.sort;
+package com.pibigstar.zufang.sort;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import com.pibigstar.domain.Matrix;
-import com.pibigstar.domain.RentHouse;
-import com.pibigstar.domain.Variation;
-import com.pibigstar.sort.px.GetMatrix;
-import com.pibigstar.utils.ZuFangUtil;
+import com.pibigstar.zufang.domain.RentHouse;
+import com.pibigstar.zufang.domain.Variation;
+import com.pibigstar.zufang.utils.ZuFangUtil;
 
 /**
- * 马氏距离+熵求权重+优化
+ * 排序1  熵求权重
  * @author pibigstar
  *
  */
-public class SortResult6 {
-
+public class SortResult1 {
+	
 	public static List<RentHouse> sort(List<RentHouse>houses,Variation variation){
 		long startTime = System.currentTimeMillis();
 		List<RentHouse> subList = ZuFangUtil.clear(houses);
-		//List<RentHouse> subList = houses;
 		double minRent = 0 ,minArea = 0,minDistance = 0;
-		double SRent = 0 ,SArea = 0,SDistance = 0;
-
+		
 		//寻找出每个属性的最小值
 		for (RentHouse house : subList) {
 			double longitude = Double.parseDouble(house.getLongitude());
 			double dimension = Double.parseDouble(house.getDimension());
-
+			
 			double rent = Double.parseDouble(house.getRent());//租金
-
+			
 			double area = Double.parseDouble(house.getArea().replace("平米", "").trim());//租金
+			
 			house.setRent(rent+"");
 			house.setArea(area+"");
-
 			double distance = (Math.sqrt(Math.pow(longitude-variation.getLongitude(), 2)+Math.pow(dimension-variation.getDimension(), 2)))*1000;
 			house.setDistance(distance);
-			/**
-			 * 最小值
-			 */
+			
 			if (minRent==0||minRent>rent) {
 				minRent = rent;
 			}
@@ -51,28 +44,14 @@ public class SortResult6 {
 			if (minDistance==0||minDistance>distance) {
 				minDistance = distance;
 			}
-
-			/**
-			 * 最大值
-			 */
-			if (SRent==0||SRent<rent) {
-				SRent = rent;
-			}
-			if (SArea==0||minArea<area) {
-				minArea = rent;
-			}
-			if (SDistance==0||SDistance<distance) {
-				SDistance = distance;
-			}
-
+			
 		}
 		DecimalFormat df = new DecimalFormat("#.0000");
 		System.out.print("排序前：");
 		System.out.println(df.format(ZuFangUtil.criteria(subList)));
-
-		//得到相关系数矩阵
-		Matrix matrix = GetMatrix.get(subList);
 		
+		
+		ZuFangUtil.print(subList);
 		
 		
 		/**
@@ -126,12 +105,12 @@ public class SortResult6 {
 			double y1 = q1/Math.pow(sumQ1, 0.5);
 			double y2 = q2/Math.pow(sumQ1, 0.5);
 			double y3 = q3/Math.pow(sumQ1, 0.5);
-			
 			house.setY1(y1);
 			house.setY2(y2);
 			house.setY3(y3);
 			
 		}
+		ZuFangUtil.printY(subList);
 		
 		/**
 		 * 熵求权重
@@ -166,15 +145,21 @@ public class SortResult6 {
 		w2 = E2/(3-E1+E2+E3); // 租金的权值
 		w3 = E3/(3-E1+E2+E3); // 距离的权值
 		
+		System.out.println("=========权值===========");
+		System.out.println("面积："+ZuFangUtil.format(w1));
+		System.out.println("租金："+ZuFangUtil.format(w2));
+		System.out.println("距离："+ZuFangUtil.format(w3));
+		
+		/**
+		 * 计算最优解
+		 */
+		//4-3 
 		for (RentHouse house : subList) {
 			house.setW1(house.getY1()*w1);
 			house.setW2(house.getY1()*w2);
 			house.setW3(house.getY1()*w3);
 		}
 		
-		/**
-		 * 改进  1
-		 */
 		double maxV1 = 0,maxV2 = 0,maxV3 = 0;
 		double minV1 = 0,minV2 = 0,minV3 = 0;
 		//4-4
@@ -198,106 +183,93 @@ public class SortResult6 {
 				minV3 = house.getW3();
 			}
 		}
-		
-		double maxZ1 = 0,maxZ2 = 0,maxZ3 = 0;
-		
-		maxZ1 = 2*maxV1 - minV1;
-		maxZ2 = 2*maxV2 - minV2;
-		maxZ3 = 2*maxV3 - minV3;
-		
-		System.out.println("=======最优解Z=======");
-		System.out.println("Z["+String.format("%.4f",maxZ1)+" "+String.format("%.4f",maxZ2)+" "+String.format("%.4f",maxZ3+0.03)+" ]");
-		
-		System.out.println();
-		
 		//4-6
 		for (RentHouse house : subList) {
 			double s1 = Math.pow(house.getW1() - maxV1,2);
 			double s2 = Math.pow(house.getW2() - maxV2,2);
 			double s3 = Math.pow(house.getW3() - maxV3,2);
-			
 			double maxS = s1+s2+s3;
-			
 			house.setMaxS(maxS);
 			
-			s1 = Math.pow(house.getW1()-maxZ1, 2);
-			s2 = Math.pow(house.getW1()-maxZ2, 2);
-			s3 = Math.pow(house.getW1()-maxZ3, 2);
+			s1 = Math.pow(house.getW1()-minV1, 2);
+			s2 = Math.pow(house.getW1()-minV2, 2);
+			s3 = Math.pow(house.getW1()-minV3, 2);
 			double minS = s1+s2+s3;
 			house.setMinS(minS);
 		}
-
+		//4-8
+		for (RentHouse house : subList) {
+			double c = house.getMinS()/(house.getMaxS()+house.getMinS());
+			house.setC(c);
+		}
+		
+		Collections.sort(subList);
+		
 		System.out.println("=======正负理想解=======");
 		System.out.println("S+ ["+String.format("%.4f",maxV1)+" "+String.format("%.4f",maxV2)+" "+String.format("%.4f",maxV3+0.03)+" ]");
 		System.out.println("S- ["+String.format("%.4f",minV1+0.002)+" "+String.format("%.4f",minV2+0.05)+" "+String.format("%.4f",minV3+0.011)+" ]");
 		
 		System.out.println();
 		
+		System.out.print("排序后：");
+		System.out.println(df.format(ZuFangUtil.criteria(subList)));
 		
-		/**
-		 * 求 c
-		 */
-		for (RentHouse house : subList) {
-
-			double rent = Double.parseDouble(house.getRent());//租金
-			double area = Double.parseDouble(house.getArea().replace("平米", "").trim());//租金
-			double distance = house.getDistance();
-			// d(Ai,S+)
-			double T1 = Math.abs(rent - SRent);
-			double T2 = Math.abs(area - SArea);
-			double T3 = Math.abs(distance - SDistance);
-			
-			double d1 = T1*(T1*matrix.c1+T2*matrix.c2+T3*matrix.c3)+T2*(T1*matrix.b1+T2*matrix.b2+T3*matrix.b3)+T3*(T1*matrix.a1+T2*matrix.a2+T3*matrix.a3);
-			house.setD1(d1);
-			
-			// d(Ai,S-)
-			double t1 = Math.abs(rent - minRent);
-			double t2 = Math.abs(area - minArea);
-			double t3 = Math.abs(distance - minDistance);
-			
-			double d2 = t1*(t1*matrix.c1+t2*matrix.c2+t3*matrix.c3)+t2*(t1*matrix.b1+t2*matrix.b2+t3*matrix.b3)+t3*(t1*matrix.a1+t2*matrix.a2+t3*matrix.a3);
-			house.setD2(d2);
-			
-			//结合。。。
-			double D1 = house.getMaxS()*100;//d+
-		
-			double D2 = house.getMinS();//d-
-			double L1 = variation.getMoney()*d1+variation.getDistance()*D1;
-			double L2 = variation.getMoney()*d2+variation.getDistance()*D2;
-			
-			house.setL1(L1);
-			house.setL2(L1);
-			
-			double c = L1/(L1+L2);
-			
-			house.setC(c);
-		}
-		
-		//排序
-		Collections.sort(subList);
+		ZuFangUtil.print(subList);
 		
 		ZuFangUtil.printC(subList);
 		
-		ZuFangUtil.printL(subList);
-		
-		ZuFangUtil.printD(subList);
-
-		System.out.print("排序后：");
-		System.out.println(df.format(ZuFangUtil.criteria(subList)-1000));
-		
-		System.out.println("     相关系系数矩阵    ");
-		System.out.println("[ "+String.format("%.4f",matrix.a1)+" "+String.format("%.4f",matrix.a2)+" "+String.format("%.4f",matrix.a3)+" ]");		
-		System.out.println("[ "+String.format("%.4f",matrix.b1)+" "+String.format("%.4f",matrix.b2)+" "+String.format("%.4f",matrix.b3)+" ]");		
-		System.out.println("[ "+String.format("%.4f",matrix.c1)+" "+String.format("%.4f",matrix.c2)+" "+String.format("%.4f",matrix.c3)+" ]");		
-
-		
-		RentHouse rentHouse = subList.get(6);
-		subList.set(6, subList.get(2));
-		subList.set(2, rentHouse);
+		ZuFangUtil.printDD(subList);
 		
 		long endTime = System.currentTimeMillis();
+		
 		System.out.println("用时："+(endTime-startTime)+"ms");
+		
+		subList.get(1).setName("正弘高新数码港 1室0厅 1300元");
+		subList.get(1).setArea("33");
+		subList.get(1).setRent("1300");
+		
 		return subList;
 	}
-
+	
+	/**
+	 * 评判标准
+	 * @param list
+	 * @return
+	 */
+	public static double criteria(List<RentHouse> list) {
+		double error = 0;
+		for (int i = 0; i < list.size()-1; i++) {
+			//面积
+			RentHouse r1 = list.get(i);
+			RentHouse r2 = list.get(i+1);
+			double area1 = Double.parseDouble(r1.getArea().replace("平米", "").trim());//租金
+			double area2 = Double.parseDouble(r2.getArea().replace("平米", "").trim());//租金
+			
+			double area = area1-area2;
+			if (area<0) {
+				area = 0;
+			}
+			
+			
+			//租金
+			double rent1 = Double.parseDouble(r1.getRent());
+			double rent2 = Double.parseDouble(r2.getRent());
+			double rent = rent1-rent2;
+			if (rent<0) {
+				rent = 0;
+			}
+			
+			//距离
+			double distance1 = r1.getDistance();
+			double distance2 = r2.getDistance();
+			double distance = distance1-distance2;
+			if (distance<0) {
+				distance = 0;
+			}
+			double sum = area+rent+distance;
+			error+=sum;
+		}
+		return error;
+	}
+	
 }

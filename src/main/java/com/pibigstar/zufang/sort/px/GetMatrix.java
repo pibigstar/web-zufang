@@ -1,10 +1,10 @@
-package com.pibigstar.sort.px;
+package com.pibigstar.zufang.sort.px;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pibigstar.domain.Matrix;
-import com.pibigstar.domain.RentHouse;
+import com.pibigstar.zufang.domain.Matrix;
+import com.pibigstar.zufang.domain.RentHouse;
 
 public class GetMatrix {
 

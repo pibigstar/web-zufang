@@ -1,15 +1,15 @@
-package com.pibigstar.sort;
+package com.pibigstar.zufang.sort;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.pibigstar.domain.Matrix;
-import com.pibigstar.domain.RentHouse;
-import com.pibigstar.domain.Variation;
-import com.pibigstar.sort.px.GetMatrix;
-import com.pibigstar.utils.ZuFangUtil;
+import com.pibigstar.zufang.domain.Matrix;
+import com.pibigstar.zufang.domain.RentHouse;
+import com.pibigstar.zufang.domain.Variation;
+import com.pibigstar.zufang.sort.px.GetMatrix;
+import com.pibigstar.zufang.utils.ZuFangUtil;
 
 /**
  * 马氏距离

@@ -1,9 +1,9 @@
-package com.pibigstar.utils;
+package com.pibigstar.zufang.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pibigstar.domain.RentHouse;
+import com.pibigstar.zufang.domain.RentHouse;
 
 public class ZuFangUtil {
 

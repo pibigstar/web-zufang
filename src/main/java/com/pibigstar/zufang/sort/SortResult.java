@@ -1,11 +1,11 @@
-package com.pibigstar.sort;
+package com.pibigstar.zufang.sort;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.pibigstar.domain.RentHouse;
-import com.pibigstar.domain.Variation;
+import com.pibigstar.zufang.domain.RentHouse;
+import com.pibigstar.zufang.domain.Variation;
 
 /**
  * @author pibigstar

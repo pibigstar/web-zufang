@@ -1,4 +1,4 @@
-package com.pibigstar.controller;
+package com.pibigstar.zufang.controller;
 
 import java.util.List;
 
@@ -6,18 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pibigstar.domain.RentHouse;
-import com.pibigstar.domain.Variation;
-import com.pibigstar.repository.RentHouseRepository;
-import com.pibigstar.sort.SortResult;
-import com.pibigstar.sort.SortResult1;
-import com.pibigstar.sort.SortResult2;
-import com.pibigstar.sort.SortResult3;
-import com.pibigstar.sort.SortResult4;
-import com.pibigstar.sort.SortResult5;
-import com.pibigstar.sort.SortResult6;
-import com.pibigstar.sort.SortResult7;
-import com.pibigstar.utils.JsonResult;
+import com.pibigstar.zufang.domain.RentHouse;
+import com.pibigstar.zufang.domain.Variation;
+import com.pibigstar.zufang.repository.RentHouseRepository;
+import com.pibigstar.zufang.sort.SortResult;
+import com.pibigstar.zufang.sort.SortResult1;
+import com.pibigstar.zufang.sort.SortResult2;
+import com.pibigstar.zufang.sort.SortResult3;
+import com.pibigstar.zufang.sort.SortResult4;
+import com.pibigstar.zufang.sort.SortResult5;
+import com.pibigstar.zufang.sort.SortResult6;
+import com.pibigstar.zufang.sort.SortResult7;
+import com.pibigstar.zufang.utils.JsonResult;
 
 @RestController
 public class RentHouseController {

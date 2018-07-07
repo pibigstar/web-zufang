@@ -1,4 +1,4 @@
-package com.pibigstar.controller;
+package com.pibigstar.zufang.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
