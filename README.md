@@ -15,3 +15,7 @@
 ### 参考资料
 - [高德地图开发手册](http://lbs.amap.com/api/javascript-api/gettingstarted)
 - [Echarts示例](http://echarts.baidu.com/examples/)
+
+### 相关项目
+
+- [租房爬虫](https://github.com/pibigstar/scrapy-zufang)
